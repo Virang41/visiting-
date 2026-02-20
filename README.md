@@ -7,26 +7,22 @@ A complete **MERN stack** Visitor Pass Management System with QR code based pass
 ![Stack](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Stack](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white)
 
----
 
-## 🎥 Demo Video
+##  Demo Video
 
-> Click below to watch the full demo walkthrough:
+<video src="screenshots/demo-video.mp4" controls width="100%"></video>
 
-https://github.com/user-attachments/assets/demo-video.mp4
+> **📥 [Click here to Download & Watch Demo](https://github.com/Virang41/visiting-/raw/main/screenshots/demo-video.mp4)**
 
-> *(If the above doesn't play, open `screenshots/demo-video.mp4` locally)*
 
----
+##  Screenshots
 
-## 📸 Screenshots
-
-### 🔐 Authentication
+###  Authentication
 | Password Login | OTP Login |
 |---|---|
 | ![Password Login](screenshots/01-password-login.png) | ![OTP Login](screenshots/02-otp-login.png) |
 
-### 🏠 Admin Panel
+###  Admin Panel
 | Dashboard | Reports & Analytics |
 |---|---|
 | ![Admin Dashboard](screenshots/03-admin-dashboard.png) | ![Reports](screenshots/04-reports.png) |
@@ -39,7 +35,7 @@ https://github.com/user-attachments/assets/demo-video.mp4
 |---|---|
 | ![Appointments](screenshots/07-appointments.png) | ![Passes](screenshots/08-passes.png) |
 
-### 🔒 Security Desk
+###  Security Desk
 | QR Check-In/Out | Check-In/Out Logs |
 |---|---|
 | ![Check-In Admin](screenshots/09-checkin-admin.png) | ![Check Logs](screenshots/10-checklogs.png) |
@@ -48,12 +44,12 @@ https://github.com/user-attachments/assets/demo-video.mp4
 |---|
 | ![Security Check-In](screenshots/11-checkin-security.png) |
 
-### 👤 Employee & Visitor
+###  Employee & Visitor
 | Employee Appointments | Visitor Pass |
 |---|---|
 | ![Employee Appointments](screenshots/12-employee-appointments.png) | ![Visitor Pass](screenshots/13-visitor-pass.png) |
 
----
+
 
 ##  Features
 
