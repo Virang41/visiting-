@@ -17,7 +17,7 @@ const seedDB = async () => {
     try {
         await connectDB();
 
-        // Clear existing data
+        // Cler user data
         console.log('🗑️  Clearing existing data...');
         await User.deleteMany({});
         await Visitor.deleteMany({});
@@ -73,6 +73,7 @@ const seedDB = async () => {
             }
         ]);
 
+        // user personl data
         const [admin, security, emp1, emp2, visitorUser] = users;
 
         console.log('🧑‍💼 Creating visitors...');
@@ -99,6 +100,7 @@ const seedDB = async () => {
                 visitCount: 1
             },
             {
+                // name of user
                 name: 'Vikram Reddy',
                 email: 'vikram.r@biztech.com',
                 phone: '9876543216',
@@ -120,6 +122,7 @@ const seedDB = async () => {
             }
         ]);
 
+        //user appointment
         console.log('📅 Creating appointments...');
         const today = new Date();
         const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
@@ -183,7 +186,7 @@ const seedDB = async () => {
         ]);
 
         console.log('🎫 Issuing passes...');
-        // Issue pass for approved appointments
+        // issue pas accept
         const passData = async (appt, visitor, host) => {
             const scheduledDateTime = new Date(appt.scheduledDate);
             const [hours, minutes] = appt.scheduledTime.split(':').map(Number);
@@ -250,8 +253,8 @@ const seedDB = async () => {
                 timestamp: new Date(today.getTime() - 60 * 60000)
             }
         ]);
-
-        console.log('\n✅ Database seeded successfully!\n');
+        // user databse in visiting
+        console.log('\n Database seeded successfully!\n');
         console.log('═══════════════════════════════════════');
         console.log('  DEMO ACCOUNTS');
         console.log('═══════════════════════════════════════');
@@ -271,5 +274,5 @@ const seedDB = async () => {
         process.exit(0);
     }
 };
-
+// complete seed .js code
 seedDB();
