@@ -10,7 +10,7 @@ const qrService = require('./services/qrService');
 
 const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/visitor_pass_db');
-    console.log('✅ Connected to MongoDB');
+    console.log('✅ Connect to MongoDB');
 };
 
 const seedDB = async () => {
@@ -18,17 +18,21 @@ const seedDB = async () => {
         await connectDB();
 
         // Cler user data
-        console.log('🗑️  Clearing existing data...');
+        console.log('🗑️  Clear exist data');
         await User.deleteMany({});
+
         await Visitor.deleteMany({});
+
         await Appointment.deleteMany({});
+
+
         await Pass.deleteMany({});
         await CheckLog.deleteMany({});
 
-        console.log('👥 Creating users...');
+        console.log('👥 Creat user');
         const users = await User.create([
             {
-                name: 'Admin User',
+                name: 'Admin ',
                 email: 'admin@visitpass.com',
                 password: 'Admin@123',
                 role: 'admin',
@@ -36,8 +40,9 @@ const seedDB = async () => {
                 department: 'Administration',
                 isActive: true
             },
+
             {
-                name: 'Security Guard',
+                name: 'Security ',
                 email: 'security@visitpass.com',
                 password: 'Security@123',
                 role: 'security',
@@ -45,8 +50,9 @@ const seedDB = async () => {
                 department: 'Security',
                 isActive: true
             },
+
             {
-                name: 'Rajesh Kumar',
+                name: 'Rajsh Kathiriya',
                 email: 'rajesh@visitpass.com',
                 password: 'Employee@123',
                 role: 'employee',
@@ -54,8 +60,9 @@ const seedDB = async () => {
                 department: 'Engineering',
                 isActive: true
             },
+
             {
-                name: 'Priya Sharma',
+                name: 'Priy kathiriya',
                 email: 'priya@visitpass.com',
                 password: 'Employee@123',
                 role: 'employee',
@@ -63,23 +70,25 @@ const seedDB = async () => {
                 department: 'Human Resources',
                 isActive: true
             },
+
             {
-                name: 'Amit Singh',
+                name: 'Ameet kathiriya',
                 email: 'amit.visitor@gmail.com',
                 password: 'Visitor@123',
                 role: 'visitor',
                 phone: '9876543214',
                 isActive: true
             }
+
         ]);
 
         // user personl data
         const [admin, security, emp1, emp2, visitorUser] = users;
 
-        console.log('🧑‍💼 Creating visitors...');
+        console.log('🧑‍💼 Creat visitor');
         const visitors = await Visitor.create([
             {
-                name: 'Amit Singh',
+                name: 'Ameet kathiriya',
                 email: 'amit.visitor@gmail.com',
                 phone: '9876543214',
                 company: 'TechCorp Ltd.',
@@ -99,9 +108,10 @@ const seedDB = async () => {
                 address: '456, Nehru Street, Mumbai',
                 visitCount: 1
             },
+
             {
-                // name of user
-                name: 'Vikram Reddy',
+                // name of user is th company user
+                name: 'Veekram radadiya',
                 email: 'vikram.r@biztech.com',
                 phone: '9876543216',
                 company: 'BizTech Pvt Ltd',
@@ -110,8 +120,9 @@ const seedDB = async () => {
                 address: '789, Jubilee Hills, Hyderabad',
                 visitCount: 0
             },
+
             {
-                name: 'Nisha Gopalan',
+                name: 'Nisha vagahsiya',
                 email: 'nisha.g@finance.org',
                 phone: '9876543217',
                 company: 'Finance First',
@@ -120,10 +131,11 @@ const seedDB = async () => {
                 address: '321, Anna Salai, Chennai',
                 visitCount: 3
             }
+
         ]);
 
-        //user appointment
-        console.log('📅 Creating appointments...');
+        //user appointment for to in my users
+        console.log('📅 Creat appointment');
         const today = new Date();
         const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
         const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
@@ -132,7 +144,7 @@ const seedDB = async () => {
             {
                 visitor: visitors[0]._id,
                 host: emp1._id,
-                purpose: 'Project Discussion & Technical Review',
+                purpose: 'Project Discussion ',
                 scheduledDate: today,
                 scheduledTime: '10:30',
                 duration: 90,
@@ -146,7 +158,7 @@ const seedDB = async () => {
             {
                 visitor: visitors[1]._id,
                 host: emp2._id,
-                purpose: 'HR Interview - Senior Developer',
+                purpose: 'HR Interview ',
                 scheduledDate: today,
                 scheduledTime: '14:00',
                 duration: 60,
@@ -157,35 +169,38 @@ const seedDB = async () => {
                 approvedAt: new Date(),
                 notificationSent: true
             },
+
             {
                 visitor: visitors[2]._id,
                 host: emp1._id,
-                purpose: 'Product Demo Presentation',
+                purpose: 'Product Demo ',
                 scheduledDate: tomorrow,
                 scheduledTime: '11:00',
                 duration: 120,
-                location: 'Board Room',
-                department: 'Engineering',
-                status: 'pending',
+                location: 'Bord Room',
+                department: 'Engineer',
+                status: 'pen',
                 notificationSent: false
             },
+
             {
                 visitor: visitors[3]._id,
                 host: emp1._id,
-                purpose: 'Quarterly Financial Audit',
+                purpose: 'Quarterly ',
                 scheduledDate: yesterday,
                 scheduledTime: '09:00',
                 duration: 180,
-                location: 'Finance Floor',
+                location: 'Finace Floor',
                 department: 'Finance',
-                status: 'completed',
+                status: 'complete',
                 approvedBy: admin._id,
                 approvedAt: yesterday,
                 notificationSent: true
             }
+
         ]);
 
-        console.log('🎫 Issuing passes...');
+        console.log('🎫 Issue pass');
         // issue pas accept
         const passData = async (appt, visitor, host) => {
             const scheduledDateTime = new Date(appt.scheduledDate);
@@ -205,10 +220,10 @@ const seedDB = async () => {
                 validTo,
                 issuedBy: admin._id,
                 location: appt.location,
-                status: 'active',
+                status: 'activ',
                 qrCode,
                 qrData: JSON.stringify({ visitorName: visitor.name, validFrom, validTo }),
-                accessAreas: ['Main Lobby', 'Meeting Room', appt.location]
+                accessAreas: ['Main Loby', 'Meet Room', appt.location]
             };
         };
 
@@ -216,7 +231,7 @@ const seedDB = async () => {
         const pass2Data = await passData(appointments[1], visitors[1], emp2);
         const passes = await Pass.create([pass1Data, pass2Data]);
 
-        // Update QR data with real passId
+        // Update QR data with real pasId
         for (const pass of passes) {
             pass.qrData = JSON.stringify({ passId: pass.passId, visitorName: pass.visitor });
             pass.qrCode = await qrService.generateQR(JSON.stringify({ passId: pass.passId }));
@@ -248,13 +263,13 @@ const seedDB = async () => {
                 visitor: visitors[1]._id,
                 type: 'check-in',
                 scannedBy: security._id,
-                location: 'Main Entrance',
+                location: 'Main Entranc',
                 method: 'manual',
                 timestamp: new Date(today.getTime() - 60 * 60000)
             }
         ]);
-        // user databse in visiting
-        console.log('\n Database seeded successfully!\n');
+        // user datbse in visit
+        console.log('\n Datbase seed successful\n');
         console.log('═══════════════════════════════════════');
         console.log('  DEMO ACCOUNTS');
         console.log('═══════════════════════════════════════');
@@ -270,7 +285,7 @@ const seedDB = async () => {
         console.error(err);
     } finally {
         await mongoose.connection.close();
-        console.log('🔌 MongoDB disconnected');
+        console.log('🔌 MongoDB disconect');
         process.exit(0);
     }
 };
