@@ -1,13 +1,22 @@
 require('dotenv').config();
+// user config fil mate
 const mongoose = require('mongoose');
+// mongoose tee requiree chhe daatabsse mate
 const bcrypt = require('bcryptjs');
+// bcypt secrity jaruri chhe
 const User = require('./models/User');
+// useeer mate required chhee aa
 const Visitor = require('./models/Visitor');
+// visiotr matee requir chh aa
 const Appointment = require('./models/Appointment');
+// appointmnt mt inportant chh aa
 const Pass = require('./models/Pass');
+// pass mat rquir chh aa
 const CheckLog = require('./models/CheckLog');
+// chcklog mat rquir chh aa
 const qrService = require('./services/qrService');
-
+// srivc mt jaruri chh  aa
+// const is to the require to code
 const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/visitor_pass_db');
     console.log('✅ Connect to MongoDB');
@@ -17,18 +26,18 @@ const seedDB = async () => {
     try {
         await connectDB();
 
-        // Cler user data
+        // user no data delte karva mate
         console.log('🗑️  Clear exist data');
         await User.deleteMany({});
-
+        // visiotr no data delete karva amte
         await Visitor.deleteMany({});
-
+        // appointment vala no data delete larvamate
         await Appointment.deleteMany({});
 
-
+        // pass vala no data delete karva amte
         await Pass.deleteMany({});
         await CheckLog.deleteMany({});
-
+        // user name and detail mate in information
         console.log('👥 Creat user');
         const users = await User.create([
             {
@@ -82,7 +91,7 @@ const seedDB = async () => {
 
         ]);
 
-        // user personl data
+        // user no personla dat5a ahiya chhe
         const [admin, security, emp1, emp2, visitorUser] = users;
 
         console.log('🧑‍💼 Creat visitor');
@@ -110,7 +119,7 @@ const seedDB = async () => {
             },
 
             {
-                // name of user is th company user
+                // aa user aa biz pvt lts commany ka owner chhe
                 name: 'Veekram radadiya',
                 email: 'vikram.r@biztech.com',
                 phone: '9876543216',
@@ -134,7 +143,7 @@ const seedDB = async () => {
 
         ]);
 
-        //user appointment for to in my users
+        //user appointment kare chhe owner sathe
         console.log('📅 Creat appointment');
         const today = new Date();
         const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
@@ -154,6 +163,7 @@ const seedDB = async () => {
                 approvedBy: admin._id,
                 approvedAt: new Date(),
                 notificationSent: true
+                // user ni detail ahiya chhe
             },
             {
                 visitor: visitors[1]._id,
@@ -199,7 +209,7 @@ const seedDB = async () => {
             }
 
         ]);
-
+        // user ne pass isue karva mate
         console.log('🎫 Issue pass');
         // issue pas accept
         const passData = async (appt, visitor, host) => {
@@ -226,12 +236,12 @@ const seedDB = async () => {
                 accessAreas: ['Main Loby', 'Meet Room', appt.location]
             };
         };
-
+        //  user no data and privacy control karva mate
         const pass1Data = await passData(appointments[0], visitors[0], emp1);
         const pass2Data = await passData(appointments[1], visitors[1], emp2);
         const passes = await Pass.create([pass1Data, pass2Data]);
 
-        // Update QR data with real pasId
+        // usere ni pass is and tno data updte karv mate
         for (const pass of passes) {
             pass.qrData = JSON.stringify({ passId: pass.passId, visitorName: pass.visitor });
             pass.qrCode = await qrService.generateQR(JSON.stringify({ passId: pass.passId }));
@@ -258,6 +268,7 @@ const seedDB = async () => {
                 method: 'qr_scan',
                 timestamp: new Date(today.getTime() - 30 * 60000)
             },
+            /'user ni information'
             {
                 pass: passes[1]._id,
                 visitor: visitors[1]._id,
@@ -289,5 +300,5 @@ const seedDB = async () => {
         process.exit(0);
     }
 };
-// complete seed .js code
+// seeeed.js cod eahiy purot thai che.
 seedDB();
