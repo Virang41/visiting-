@@ -37,11 +37,10 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/visitors', require('./routes/visitors'));
 app.use('/api/appointments', require('./routes/appointments'));
-// appointmnt mate khoobajh inpotnt ch
+app.use('/api/passes', require('./routes/passes')); // pass issue and pdf download ke liye
 app.use('/api/checkins', require('./routes/checkins'));
 app.use('/api/dashboard', require('./routes/dashboard'));
-// dashboard show kare tema usr ni dtail sho thai chh
-app.get('/api/healt', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Vistors Pass API is run', time: new Date() });
 });
 app.use((err, req, res, next) => {
@@ -83,10 +82,10 @@ const seedDB = async () => {
         await Pass.deleteMany({});
         await CheckLog.deleteMany({});
 
-        console.log('👥 Creat user');
+        console.log('👥 Creating users...');
         const users = await User.create([
             {
-                name: 'Admin ',
+                name: 'Admin User',
                 email: 'admin@visitpass.com',
                 password: 'Admin@123',
                 role: 'admin',
@@ -95,7 +94,7 @@ const seedDB = async () => {
                 isActive: true
             },
             {
-                name: 'Security ',
+                name: 'Security Guard',
                 email: 'security@visitpass.com',
                 password: 'Security@123',
                 role: 'security',
@@ -104,7 +103,7 @@ const seedDB = async () => {
                 isActive: true
             },
             {
-                name: 'Rajsh Kathiriya',
+                name: 'Rajesh Kathiriya',
                 email: 'rajesh@visitpass.com',
                 password: 'Employee@123',
                 role: 'employee',
@@ -113,7 +112,7 @@ const seedDB = async () => {
                 isActive: true
             },
             {
-                name: 'Priy kathiriya',
+                name: 'Priya Kathiriya',
                 email: 'priya@visitpass.com',
                 password: 'Employee@123',
                 role: 'employee',
@@ -122,7 +121,7 @@ const seedDB = async () => {
                 isActive: true
             },
             {
-                name: 'Ameet kathiriya',
+                name: 'Amit Kathiriya',
                 email: 'amit.visitor@gmail.com',
                 password: 'Visitor@123',
                 role: 'visitor',
@@ -136,7 +135,7 @@ const seedDB = async () => {
         console.log('🧑‍💼 Creat visitor');
         const visitors = await Visitor.create([
             {
-                name: 'Ameet kathiriya',
+                name: 'Amit Kathiriya',
                 email: 'amit.visitor@gmail.com',
                 phone: '9876543214',
                 company: 'TechCorp Ltd.',
@@ -157,7 +156,7 @@ const seedDB = async () => {
                 visitCount: 1
             },
             {
-                name: 'Veekram radadiya',
+                name: 'Vikram Radadiya',
                 email: 'vikram.r@biztech.com',
                 phone: '9876543216',
                 company: 'BizTech Pvt Ltd',
@@ -167,7 +166,7 @@ const seedDB = async () => {
                 visitCount: 0
             },
             {
-                name: 'Nisha vagahsiya',
+                name: 'Nisha Vaghasiya',
                 email: 'nisha.g@finance.org',
                 phone: '9876543217',
                 company: 'Finance First',
@@ -187,7 +186,7 @@ const seedDB = async () => {
             {
                 visitor: visitors[0]._id,
                 host: emp1._id,
-                purpose: 'Project Discussion ',
+                purpose: 'Project Discussion',
                 scheduledDate: today,
                 scheduledTime: '10:30',
                 duration: 90,
@@ -201,7 +200,7 @@ const seedDB = async () => {
             {
                 visitor: visitors[1]._id,
                 host: emp2._id,
-                purpose: 'HR Interview ',
+                purpose: 'HR Interview',
                 scheduledDate: today,
                 scheduledTime: '14:00',
                 duration: 60,
@@ -215,25 +214,25 @@ const seedDB = async () => {
             {
                 visitor: visitors[2]._id,
                 host: emp1._id,
-                purpose: 'Product Demo ',
+                purpose: 'Product Demo',
                 scheduledDate: tomorrow,
                 scheduledTime: '11:00',
                 duration: 120,
-                location: 'Bord Room',
-                department: 'Engineer',
-                status: 'pen',
+                location: 'Board Room',
+                department: 'Engineering',
+                status: 'pending',
                 notificationSent: false
             },
             {
                 visitor: visitors[3]._id,
                 host: emp1._id,
-                purpose: 'Quarterly ',
+                purpose: 'Quarterly Review',
                 scheduledDate: yesterday,
                 scheduledTime: '09:00',
                 duration: 180,
-                location: 'Finace Floor',
+                location: 'Finance Floor',
                 department: 'Finance',
-                status: 'complete',
+                status: 'completed',
                 approvedBy: admin._id,
                 approvedAt: yesterday,
                 notificationSent: true
@@ -259,10 +258,10 @@ const seedDB = async () => {
                 validTo,
                 issuedBy: admin._id,
                 location: appt.location,
-                status: 'activ',
+                status: 'active',
                 qrCode,
                 qrData: JSON.stringify({ visitorName: visitor.name, validFrom, validTo }),
-                accessAreas: ['Main Loby', 'Meet Room', appt.location]
+                accessAreas: ['Main Lobby', 'Meeting Room', appt.location]
             };
         };
 
@@ -301,7 +300,7 @@ const seedDB = async () => {
                 visitor: visitors[1]._id,
                 type: 'check-in',
                 scannedBy: security._id,
-                location: 'Main Entranc',
+                location: 'Main Entrance',
                 method: 'manual',
                 timestamp: new Date(today.getTime() - 60 * 60000)
             }

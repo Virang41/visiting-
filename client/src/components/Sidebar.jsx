@@ -6,71 +6,19 @@ import {
     MdLogout, MdGroups, MdAdminPanelSettings
 } from 'react-icons/md';
 
-const navConfig = {
-    admin: [
-        {
-            section: 'Overview', items: [
-                { to: '/admin/dashboard', icon: <MdDashboard />, label: 'Dashboard' },
-                { to: '/admin/reports', icon: <MdBarChart />, label: 'Reports & Analytics' }
-            ]
-        },
-        {
-            section: 'Management', items: [
-                { to: '/admin/users', icon: <MdAdminPanelSettings />, label: 'User Management' },
-                { to: '/admin/visitors', icon: <MdGroups />, label: 'Visitors' },
-                { to: '/admin/appointments', icon: <MdAssignment />, label: 'Appointments' },
-                { to: '/admin/passes', icon: <MdBadge />, label: 'Passes' }
-            ]
-        },
-        {
-            section: 'Security', items: [
-                { to: '/security/checkin', icon: <MdQrCodeScanner />, label: 'Check In/Out' },
-                { to: '/security/logs', icon: <MdHistory />, label: 'Check Logs' }
-            ]
-        }
-    ],
-    security: [
-        {
-            section: 'Security Desk', items: [
-                { to: '/security/checkin', icon: <MdQrCodeScanner />, label: 'Scan & Check In' },
-                { to: '/security/logs', icon: <MdHistory />, label: 'Activity Logs' }
-            ]
-        }
-    ],
-    employee: [
-        {
-            section: 'My Work', items: [
-                { to: '/employee/appointments', icon: <MdAssignment />, label: 'My Appointments' },
-                { to: '/employee/invite', icon: <MdPersonAdd />, label: 'Invite Visitor' }
-            ]
-        }
-    ],
-    visitor: [
-        {
-            section: 'My Visit', items: [
-                { to: '/visitor/pass', icon: <MdBadge />, label: 'My Pass' }
-            ]
-        }
-    ]
-};
-
-const roleColors = {
-    admin: 'var(--accent-secondary)',
-    security: 'var(--accent-orange)',
-    employee: 'var(--accent-blue)',
-    visitor: 'var(--accent-green)'
-};
-
 export default function Sidebar() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const sections = navConfig[user?.role] || [];
-    const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
+
+    // user ke naam ka initials nikalo for avatar
+    const initials = user?.name
+        ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+        : '?';
 
     return (
         <aside className="sidebar">
@@ -78,38 +26,109 @@ export default function Sidebar() {
                 <div className="logo-icon">🏢</div>
                 <div>
                     <div className="logo-text">Visit<span>Pass</span></div>
-                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '1px' }}>MANAGEMENT SYSTEM</div>
+                    <div style={{ fontSize: '10px', color: 'var(--txt-faint)', letterSpacing: '1px' }}>
+                        MANAGEMENT SYSTEM
+                    </div>
                 </div>
             </div>
 
             <nav className="sidebar-nav">
-                {sections.map(({ section, items }) => (
-                    <div key={section}>
-                        <div className="nav-section-title">{section}</div>
-                        {items.map(item => (
-                            <NavLink
-                                key={item.to}
-                                to={item.to}
-                                className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
-                            >
-                                <span className="nav-icon">{item.icon}</span>
-                                {item.label}
-                            </NavLink>
-                        ))}
-                    </div>
-                ))}
+                {/* Admin nav links */}
+                {user?.role === 'admin' && (
+                    <>
+                        <div className="nav-section-title">Overview</div>
+                        <NavLink to="/admin/dashboard" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdDashboard /></span>
+                            Dashboard
+                        </NavLink>
+                        <NavLink to="/admin/reports" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdBarChart /></span>
+                            Reports & Analytics
+                        </NavLink>
+
+                        <div className="nav-section-title">Management</div>
+                        <NavLink to="/admin/users" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdAdminPanelSettings /></span>
+                            User Management
+                        </NavLink>
+                        <NavLink to="/admin/visitors" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdGroups /></span>
+                            Visitors
+                        </NavLink>
+                        <NavLink to="/admin/appointments" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdAssignment /></span>
+                            Appointments
+                        </NavLink>
+                        <NavLink to="/admin/passes" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdBadge /></span>
+                            Passes
+                        </NavLink>
+
+                        <div className="nav-section-title">Security</div>
+                        <NavLink to="/security/checkin" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdQrCodeScanner /></span>
+                            Check In/Out
+                        </NavLink>
+                        <NavLink to="/security/logs" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdHistory /></span>
+                            Check Logs
+                        </NavLink>
+                    </>
+                )}
+
+                {/* Security nav */}
+                {user?.role === 'security' && (
+                    <>
+                        <div className="nav-section-title">Security Desk</div>
+                        <NavLink to="/security/checkin" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdQrCodeScanner /></span>
+                            Scan & Check In
+                        </NavLink>
+                        <NavLink to="/security/logs" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdHistory /></span>
+                            Activity Logs
+                        </NavLink>
+                    </>
+                )}
+
+                {/* Employee nav */}
+                {user?.role === 'employee' && (
+                    <>
+                        <div className="nav-section-title">My Work</div>
+                        <NavLink to="/employee/appointments" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdAssignment /></span>
+                            My Appointments
+                        </NavLink>
+                        <NavLink to="/employee/invite" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdPersonAdd /></span>
+                            Invite Visitor
+                        </NavLink>
+                    </>
+                )}
+
+                {/* Visitor nav */}
+                {user?.role === 'visitor' && (
+                    <>
+                        <div className="nav-section-title">My Visit</div>
+                        <NavLink to="/visitor/pass" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                            <span className="nav-icon"><MdBadge /></span>
+                            My Pass
+                        </NavLink>
+                    </>
+                )}
             </nav>
 
+            {/* user info + logout button */}
             <div className="sidebar-footer">
-                <div className="user-chip" onClick={handleLogout} title="Click to logout">
-                    <div className="user-avatar" style={{ background: `linear-gradient(135deg, ${roleColors[user?.role] || 'var(--accent-primary)'}, var(--accent-primary))` }}>
+                <div className="user-chip" onClick={handleLogout} title="Logout">
+                    <div className="user-avatar">
                         {initials}
                     </div>
                     <div className="user-info">
                         <div className="user-name">{user?.name}</div>
-                        <div className="user-role" style={{ color: roleColors[user?.role] }}>{user?.role}</div>
+                        <div className="user-role">{user?.role}</div>
                     </div>
-                    <MdLogout style={{ color: 'var(--text-muted)', fontSize: '18px', marginLeft: 'auto' }} />
+                    <MdLogout style={{ color: 'var(--txt-faint)', fontSize: '18px', marginLeft: 'auto' }} />
                 </div>
             </div>
         </aside>
